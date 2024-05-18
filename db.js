@@ -1,40 +1,30 @@
- const mongoose=require('mongoose')
+const mongoose = require('mongoose');
+require('dotenv').config();
 
- //Define the MongoDb connection URL
+// const mongoURL=process.env.MONGODB_URL_LOCAL
+const mongoURL = process.env.MONGODB_URL;
 
- const mongoURL='mongodb://localhost:27017/hotels' //Replace 'mydatabase' with your database name
+if (!mongoURL) {
+    throw new Error('MONGODB_URL is not defined');
+}
 
-
- //set up MongoDb connnection
-mongoose.connect(mongoURL,{
-    useNewUrlParser:true,
-    useUnifiedTopology:true,
-})
-
-//Get the default connection
-//Mongoose maintains a default connection object representing the MongoDb connection,
-
-
-const db=mongoose.connection;
-
-
-//define event listeners for database connection
-db.on('connected',()=>{
-    console.log('MongoDb connection successful')
-})
-
-
-db.on('error',(err)=>{
-    console.log("MongoDb connection error",err);
+mongoose.connect(mongoURL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 });
 
-db.on('disconnected',()=>{
-    console.log("MongoDb disconnected");
-})
+const db = mongoose.connection;
 
+db.on('connected', () => {
+    console.log('MongoDB connection successful');
+});
 
-//Export the database connection
+db.on('error', (err) => {
+    console.error('MongoDB connection error:', err);
+});
 
-module.exports=db
+db.on('disconnected', () => {
+    console.log('MongoDB disconnected');
+});
 
-
+module.exports = db;

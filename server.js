@@ -195,52 +195,24 @@
 
 
 /**********************NODE JS ROUTING************* */
-
 const express = require('express');
 const app = express();
+require('dotenv').config();
 const db = require('./db'); // Ensure db.js properly connects to MongoDB
-// This line is crucial for being able to parse JSON bodies.
+const MenuItem = require('./models/MenuItem');
+const PORT = process.env.PORT || 3000;
+
 app.use(express.json());
 
-// Rest of your server and route setup follows...
-
-
-const MenuItem=require('./models/MenuItem')
-
-app.get('/person/:workType',async(req,res)=>{
-    try{
-        const workType=req.params.workType;
-        if(workType=='chef'||workType==='manager'||workType==='waiter')
-            {
-                const response=await Person.find({work:workType});
-                console.log('response fetched');
-
-                res.status(200).json(response);
-            }
-            else{
-                res.status(404).json({error:"Invalid work type"});
-            }
-    }
-    catch(err)
-    {
-        console.log(err);
-        res.status(500).json({error:"Internal Server Error"});
-    }
-})
-
-
-
-
-
-app.get('/taste/:tasteType', async (req, res) => {
+app.get('/person/:workType', async (req, res) => {
     try {
-        const taste = req.params.tasteType; // correctly capturing the route parameter
-        if (taste == 'spicy' || taste === 'sweet') {
-            const response = await MenuItem.find({ taste: taste }); // corrected variable usage
-            console.log('Response fetched:', response);
+        const workType = req.params.workType;
+        if (workType === 'chef' || workType === 'manager' || workType === 'waiter') {
+            const response = await Person.find({ work: workType });
+            console.log('response fetched');
             res.status(200).json(response);
         } else {
-            res.status(400).json({ error: 'Invalid taste type' }); // Fixed error message
+            res.status(404).json({ error: 'Invalid work type' });
         }
     } catch (err) {
         console.log(err);
@@ -248,19 +220,29 @@ app.get('/taste/:tasteType', async (req, res) => {
     }
 });
 
+app.get('/taste/:tasteType', async (req, res) => {
+    try {
+        const taste = req.params.tasteType;
+        if (taste === 'spicy' || taste === 'sweet') {
+            const response = await MenuItem.find({ taste: taste });
+            console.log('Response fetched:', response);
+            res.status(200).json(response);
+        } else {
+            res.status(400).json({ error: 'Invalid taste type' });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
+// Import the router files
+const personRoutes = require('./routes/personRoutes');
+const menuItemRoutes = require('./routes/menuItemRoutes');
 
-//Import the router files
-const personRoutes=require('./routes/personRoutes')
-const menuItemRoutes=require('./routes/menuItemRoutes')
+app.use('/person', personRoutes);
+app.use('/menu', menuItemRoutes);
 
-
-app.use('/person',personRoutes)
-app.use('/menu',menuItemRoutes)
-
-
-
-
-app.listen(3000,()=>{
-    console.log('Listening on port 3000')
-})
+app.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+});
