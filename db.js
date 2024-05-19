@@ -23,7 +23,7 @@ db.on('connected', () => {
 db.on('error', (err) => {
     console.error('MongoDB connection error:', err);
 });
-//dk
+
 db.on('disconnected', () => {
     console.log('MongoDB disconnected');
 });
