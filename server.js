@@ -202,7 +202,7 @@ const app = express();
 require('dotenv').config();
 const mongoose = require('mongoose');
 const db = require('./db'); // Ensure db.js properly connects to MongoDB
-const Person = require('./models/Person'); // Import the Person model
+const Person = require('./models/person'); // Import the Person model
 const MenuItem = require('./models/MenuItem');
 const PORT = process.env.PORT || 3000;
 
