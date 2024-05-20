@@ -7,11 +7,9 @@ const mongoURL = process.env.MONGODB_URL;
 if (!mongoURL) {
     throw new Error('MONGODB_URL is not defined');
 }
+//update
 
-mongoose.connect(mongoURL,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect(mongoURL)
 
 
 const db = mongoose.connection;

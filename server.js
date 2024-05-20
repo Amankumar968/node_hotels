@@ -197,11 +197,12 @@
 /**********************NODE JS ROUTING************* */
 
 
-
 const express = require('express');
 const app = express();
 require('dotenv').config();
+const mongoose = require('mongoose');
 const db = require('./db'); // Ensure db.js properly connects to MongoDB
+const Person = require('./models/Person'); // Import the Person model
 const MenuItem = require('./models/MenuItem');
 const PORT = process.env.PORT || 3000;
 
@@ -246,6 +247,9 @@ const menuItemRoutes = require('./routes/menuItemRoutes');
 app.use('/person', personRoutes);
 app.use('/menu', menuItemRoutes);
 
+
+//PORT
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
+
